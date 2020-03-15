@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT" description="Event requesting app refresh">
+    <aura:attribute name="noPendingAction" type="Boolean" />
+    <aura:attribute name="noRejectedAction" type="Boolean" />
+    <aura:attribute name="instantAppRefresh" type="Boolean" default="false" />
+</aura:event>

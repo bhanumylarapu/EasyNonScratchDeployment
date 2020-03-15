@@ -1,0 +1,40 @@
+.THIS.amex-app .ca-app {
+    overflow-x: auto;
+}
+.THIS.amex-app .ca-wrapper {
+    width: auto;
+    max-width: 1080px;
+    min-width: 360px;
+    padding: 0;
+    margin: 0 auto
+}
+.THIS .ca-wrapper .no-scroll {
+    overflow: visible;
+}
+
+/* Content */
+.THIS .ca-content {
+    flex-grow: 1
+}
+.THIS .ca-content,
+.THIS .ca-chat,
+.THIS .ca-action {
+    flex-direction: column;
+}
+.THIS .ca-content .slds-modal__content:last-child {
+    box-shadow: none
+}
+/* \Content */
+
+/* Medium size screens */
+@media only all and (min-width:48em) {
+    .THIS .ca-content {
+        flex-direction: row;
+        flex-grow: 0
+    }
+    .THIS .medium-hide,                 
+    .THIS.medium-hide {
+        display: none
+    }
+}
+/* \Medium size screens */

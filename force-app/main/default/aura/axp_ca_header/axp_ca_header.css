@@ -1,0 +1,81 @@
+/* Header */ 
+.THIS.ca-header {
+    border-top : 6px solid #0973ba;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,.16)
+}
+.THIS.ca-header .img-logo {
+    width: 1.6em;
+    height: 1.6em
+}
+.THIS.ca-header .ca-title {
+    color: #5573a1
+}
+.THIS.ca-header .ca-title,
+.THIS.ca-header .ca-user-name {
+    font-size: 1.7em
+}
+.THIS.ca-header .img-call-logo {                
+    display: block;
+    margin-top: 0.2em;
+    width: 2.3em
+}
+.THIS .ca-call-icon,
+.THIS .ca-user-name,
+.THIS .ca-call-duration {
+    display:inline-block
+}
+.THIS.ca-header .ca-call-duration {
+    color: #888888;
+    font-size: 1.2em;
+    padding-top: 0.4em
+}
+.THIS .ca-details {
+    color: #b9b9b9
+}
+.THIS .recorder-user {
+    flex-direction: row-reverse
+}
+.THIS .call-ended-msg {
+    font-size: 1.3em
+}
+.THIS .ca-reset {
+    top: 50%;
+    margin-top: -50%
+}
+.THIS .ca-reset-img {
+    margin-top: -0.25rem;
+    margin-left: -0.5rem;
+    position: absolute;
+}
+.THIS .ca-reset-img .slds-icon {
+    fill: #fff
+}
+/* \Header */
+
+/* Call ended */
+.THIS .ca-reset-icon{
+    display: inline-block
+}
+.THIS.ca-call-ended-header .recorder-user {
+    flex-direction: row
+}
+.THIS.ca-call-ended-header {
+    border-top : 2px solid #d8dde6
+}
+.THIS.ca-call-ended-header .ca-call-duration {
+    font-size: 1em;
+    padding-top: 0;
+    line-height: 1.4em
+}
+/* \Call ended */
+
+/* Medium size screens */
+@media only all and (min-width:48em) {
+    .THIS .recorder-user {
+        flex-direction: row
+    }
+    .THIS.ca-call-ended-header .ca-user-name {
+        flex: 1 1 auto
+    }
+}
+/* \Medium size screens */

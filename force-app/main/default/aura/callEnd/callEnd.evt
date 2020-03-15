@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Call end event">
+    <aura:attribute name="callEnded" type="Boolean" required="true" default="false" />
+</aura:event>

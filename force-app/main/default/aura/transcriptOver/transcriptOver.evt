@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Active transcript got over" >
+    <aura:attribute name="transcriptData" type="string" />
+</aura:event>

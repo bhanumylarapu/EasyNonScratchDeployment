@@ -1,0 +1,65 @@
+<apex:page >
+    <div style="background-image:url('{!$Resource.Img1}'); height: 600px;">
+        <apex:image url="{!$Resource.Img2}" style="margin-left: 30px; margin-top: 30px;" alt="Salesforce" title="Salesforce"/>   
+       <!-- <spam style="margin-left: 10px;">
+            <img id="liveagent_button_online_57346000000TZq3" style="display: none; border: 0px none; cursor: pointer" onclick="liveagent.startChat('57346000000TZq3')" src="https://einsteinbot-service.secure.force.com/resource/1534514319000/Online_Icon" />
+            <img id="liveagent_button_offline_57346000000TZq3" style="display: none; border: 0px none; " src="https://einsteinbot-service.secure.force.com/resource/1534514304000/Offline_Icon" />
+        </spam> -->
+    </div>
+ <!--   <script type="text/javascript">
+        if (!window._laq) { window._laq = []; }
+        window._laq.push(function(){
+            liveagent.showWhenOnline('57346000000TZq3', document.getElementById('liveagent_button_online_57346000000TZq3'));
+            liveagent.showWhenOffline('57346000000TZq3', document.getElementById('liveagent_button_offline_57346000000TZq3'));
+        });
+    </script>
+    <script type='text/javascript' src='https://c.la3-c1-dfw.salesforceliveagent.com/content/g/js/43.0/deployment.js'>
+    </script>
+    <script type='text/javascript'>
+        liveagent.init('https://d.la3-c1-dfw.salesforceliveagent.com/chat', '57246000000TZUa', '00D46000000YVcM');
+    </script> -->
+    
+    <style type='text/css'>
+        .embeddedServiceHelpButton .helpButton .uiButton { background-color: #005290; font-family: "Salesforce Sans", sans-serif; }
+        .embeddedServiceHelpButton .helpButton .uiButton:focus { outline: 1px solid #005290; }
+        @font-face {
+            font-family: 'Salesforce Sans';
+            src: url('https://www.sfdcstatic.com/system/shared/common/assets/fonts/SalesforceSans/SalesforceSans-Regular.woff') format('woff'),
+            url('https://www.sfdcstatic.com/system/shared/common/assets/fonts/SalesforceSans/SalesforceSans-Regular.ttf') format('truetype');
+        }
+    </style>
+
+    <script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
+    <script type='text/javascript'>
+        var initESW = function(gslbBaseURL) {
+            embedded_svc.settings.displayHelpButton = true; //Or false
+            embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+            
+            //embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
+            //embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+            
+            //embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+            //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+            
+            // Settings for Live Agent
+            //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+            // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+            // Returns a valid button ID.
+            //};
+            //embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+            //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+            //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+            
+            embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+            embedded_svc.settings.entryFeature = 'LiveAgent';
+            
+            embedded_svc.init('https://deloitte-einstein-service.my.salesforce.com', 'https://einsteinbot-service.secure.force.com', gslbBaseURL, '00D46000000YVcM', 'snapIn_DF18_Demo', { baseLiveAgentContentURL: 'https://c.la3-c1-dfw.salesforceliveagent.com/content', deploymentId: '57246000000g6PR', buttonId: '57346000000g6y3', baseLiveAgentURL: 'https://d.la3-c1-dfw.salesforceliveagent.com/chat', eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I46000000KyoGEAS_165ecd59c34', isOfflineSupportEnabled: true}); 
+        };
+        if (!window.embedded_svc) { 
+            var s = document.createElement('script');
+                s.setAttribute('src', 'https://deloitte-einstein-service.my.salesforce.com/embeddedservice/5.0/esw.min.js'); 
+                s.onload = function() { initESW(null); }; 
+            document.body.appendChild(s); 
+        } else { initESW('https://service.force.com'); }
+    </script>
+</apex:page>

@@ -1,0 +1,22 @@
+<apex:page standardController="Case" showHeader="false" standardStylesheets="false">
+   <!-- <apex:stylesheet value="{!URLFOR($Resource.SLDS214, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <script src="https://gcpaexp--voice.cs13.my.salesforce.com/lightning/lightning.out.js"></script>
+    <apex:includeLightning />
+    <div class="slds">
+        <div class="slds-grid slds-wrap" id="lightning" />
+    </div>
+
+    <script>
+        $Lightning.use("c:AXP_CA", function() {
+            $Lightning.createComponent(
+            "c:axp_ca_robo",
+            { id: '{!lead.id}'},
+            "lightning",
+            function(cmp) {
+                //console.log('component created');
+                //console.log(cmp);
+            });          
+         
+        });        
+    </script> -->
+</apex:page>

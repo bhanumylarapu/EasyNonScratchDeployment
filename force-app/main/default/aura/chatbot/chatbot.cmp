@@ -1,0 +1,31 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="ChatbotLightningController">
+    <ltng:require scripts="{!$Resource.Einstein_POC_jQuery + '/jquery/js/jquery-2.1.4.min.js'}" />
+    
+    <aura:attribute name="lastChatbotResponse" type="Object" />
+    <aura:attribute name="chatbotSessionId" type="Object" />
+    <aura:attribute name="currentTime" type="String" />
+    <aura:attribute name="clientName" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:method name="getCurrentTime" action="{!c.getCurrentTime}" />
+    <aura:method name="sendChat" action="{!c.sendChat}" />
+    <aura:method name="chatbotSendMessage" action="{!c.chatbotSendMessage}">
+	    <aura:attribute name="userText" type="String" />
+	</aura:method>
+    <aura:method name="handleChatbotResponse" action="{!c.handleChatbotResponse}">
+	    <aura:attribute name="data" type="Object" />
+	</aura:method>
+    <aura:method name="appendAgentChat" action="{!c.appendAgentChat}">
+	    <aura:attribute name="message" type="String" />
+	</aura:method>    
+    
+    <ui:scrollerWrapper class="outerScroller">
+        <!--ui:scrollerWrapper class="innerScroller" -->
+			<ui:outputTextArea value="" class="chatLog" aura:id="chatLog"/>
+        <!-- /ui:scrollerWrapper -->
+    </ui:scrollerWrapper>
+
+    <ui:inputText placeholder="Write a message..." class="chatInput" aura:id="chatInput" keyup="{!c.handleClientInputKeyUp}"/>
+    <ui:button label="Send" class="chatButton" press="{!c.handleSendButtonClick}"/>
+</aura:component>

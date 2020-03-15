@@ -1,0 +1,336 @@
+<apex:page showHeader="false" standardStylesheets="true" cache="true" controller="ChatbotPageController">    
+
+    <apex:includeScript value="{!URLFOR($Resource.Einstein_POC_jQuery, '/jquery/js/jquery-2.1.4.min.js')}"/>   
+
+    <!-- width: 80.9%; -->
+    <style type="text/css">
+        .chatInput {
+            border: 1px solid #D3D3D3;
+            font-size: 16px;
+            float: left;
+            color: #333331;
+            border-radius: 0;
+            display: block;
+            width: 80.9%;
+            height: 32px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555555;
+            background-color: #ffffff;
+            background-image: none;
+            border: 1px solid #cccccc;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            resize: none;
+            overflow: auto;
+        }
+        .chatButton {
+            background-color: #69be28;
+            border: 1px solid #69be28;
+            color: #fff;
+    
+            background-image: none;
+            text-shadow: none;
+            box-shadow: none;
+            padding: 10px 20px;
+            font-size: 12px;
+            line-height: 12px;
+            
+            background-image: none;
+            font-family: Verdana; 
+            border-radius: 0;
+            display: inline-block;
+            margin: auto;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;   
+            width: 100px;           
+        }
+        
+        .talkButton {
+            background-color: #69be28;
+            border: 1px solid #69be28;
+            color: #fff;
+    
+            background-image: none;
+            text-shadow: none;
+            box-shadow: none;
+            padding: 10px 20px;
+            font-size: 12px;
+            line-height: 12px;
+            
+            background-image: none;
+            font-family: Verdana; 
+            border-radius: 0;
+            display: inline-block;
+            margin: auto;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;   
+            width: 120px;           
+        }
+    
+        #chatLog {
+            height: 300px;
+            border: 1px solid #D3D3D3;
+            font-size: 16px;
+            float: left;
+            color: #333331;            
+            font-family: Verdana; 
+            overflow-y: auto;
+            width: 95%;
+            word-wrap: break-word;
+            padding: 6px 12px;
+        }  
+        
+        .agentBubble {
+            background-color: #deeff9;
+            padding: 6px;
+        }
+        
+        .clientBubble {
+            background-color: #cccfd3;
+            padding: 6px;
+        } 
+    </style>
+    <script type='text/javascript'>    
+        //var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+        //var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+        //var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent    
+        var SpeechRecognition;
+        var SpeechGrammarList;
+        var SpeechRecognitionEvent;
+        var lastChatbotResponse;
+        var chatbotSessionId;
+        var recognition;
+        var speechRecognitionList;
+        var talkToMe = false;
+        var msg;              
+        var speechRecognitionSupported = false;
+        $(document).ready(function(){    
+            lastChatbotResponse = null;
+            // Set header
+            $.ajaxSetup({
+                headers: { 'Authorization' : 'Bearer ' + '726f3a491ea046aca585c190cfc3bc50' }
+            });
+            
+            // Register Enter key event in chat input
+            $(".chatInput").keyup(function(e){ 
+                if(13 == e.keyCode) {
+                    sendChat();
+                }
+            });    
+            
+            // Generate session-id
+            chatbotSessionId = Math.random() * 10000000000000000000; 
+            
+            if(typeof webkitSpeechRecognition != 'undefined') {
+                SpeechRecognition = webkitSpeechRecognition;        
+                SpeechGrammarList = webkitSpeechGrammarList
+                SpeechRecognitionEvent = webkitSpeechRecognitionEvent                         
+            }
+            else {
+                SpeechRecognition = null;
+            }
+            
+            if(null == SpeechRecognition) {
+                console.log('Speech-recognition not supported..' + SpeechRecognition);
+                speechRecognitionSupported = false;
+                $('.talkButton').hide();
+            }
+            else {
+                speechRecognitionSupported = true;
+            }
+            msg = new SpeechSynthesisUtterance();
+            msg.onend = function (event) {
+                console.log('@@@@..Finished speaking..Starting speech recognition');
+                startSpeechRecognition();
+            }
+            console.log('document.ready complete');
+        });               
+        
+        function chatbotSendMessage(userText) {
+            // Form request body
+            var reqBody = new Object();
+            reqBody.lang = 'en';
+            reqBody.query = userText;
+            reqBody.sessionId = chatbotSessionId;
+
+            // Fill in the contexts
+            if(null != lastChatbotResponse && 0 < lastChatbotResponse.responseJSON.result.contexts.length) {
+                reqBody.contexts = lastChatbotResponse.responseJSON.result.contexts;
+                reqBody.contexts[reqBody.contexts.length - 1].parameters.Name = userText;                
+            }           
+            // Make call to Google API
+            $.ajax({
+                url: "https://api.api.ai/v1/query?v=20150910",
+                type: "POST",
+                data: JSON.stringify(reqBody),
+                contentType: "application/json",
+                complete: handleChatBotResponse
+            });                                 
+        }                
+        
+        // Handle response from Chatbot and call VF remoting if necessary
+        function handleChatBotResponse(data) {            
+            lastChatbotResponse = data;
+            if(0 == data.responseJSON.result.contexts.length && data.responseJSON.result.metadata.intentName == 'New Case') {
+                var params = data.responseJSON.result.parameters;                
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ChatbotPageController.createCase}',
+                    params.About[0],
+                    params.Description[0],
+                    params.Email[0],
+                    params.Priority[0],
+                    handleVFRemoting,
+                    {escape: true}
+                );            
+            }
+            else if(0 == data.responseJSON.result.contexts.length && data.responseJSON.result.metadata.intentName == 'Existing Case') {
+                var params = data.responseJSON.result.parameters;                
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ChatbotPageController.getCaseDetails}',
+                    params.caseNumber[0],
+                    handleVFRemoting,
+                    {escape: false}
+                );            
+            }  
+            else {
+                handleVFRemoting(null, null);
+            }
+        }
+
+        function handleVFRemoting(result, event){
+            var agentMessage = lastChatbotResponse.responseJSON.result.fulfillment.speech;        
+            if(null != result && null != event) {
+                if(event.status) {
+                    agentMessage += '<b>' + result + '</b>';
+                }
+                else {
+                    agentMessage += event.message;
+                }
+            }
+            appendAgentChat(agentMessage);
+        }        
+        function sendChat() {
+            var userText = $('.chatInput').val();
+            $('.chatInput').val('');
+            $('#chatLog').append('<p class="clientBubble"><b>' + getCurrentTime() + '    Me: </b>' + userText + '</p>');
+            $('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+            chatbotSendMessage(userText);
+        }   
+        
+        function appendAgentChat(message) {
+            message = message.replace('<clientname>', '{!$User.FirstName}');
+            message = message.replace('<clientName>', '{!$User.FirstName}');
+            if(talkToMe) {
+                msg.text = message;
+                window.speechSynthesis.speak(msg); 
+                if("" == msg.text) {
+                    startSpeechRecognition();
+                }           
+            }
+            $('#chatLog').append('<p class="agentBubble"><b>' + getCurrentTime() + '    Agent: </b>' + message + '</p>');
+            $('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);            
+        } 
+        
+        function getCurrentTime() {
+            var date_obj = new Date();
+            var hour = date_obj.getHours();
+            var minute = date_obj.getMinutes();
+            var amPM = (hour > 11) ? "pm" : "am";
+            if(hour > 12) {
+                hour -= 12;
+            } else if(hour == 0) {
+                hour = "12";
+            }
+            if(minute < 10) {
+                minute = "0" + minute;
+            }
+            return hour + ":" + minute + amPM;
+        }
+        
+        function startSpeechRecognition() {
+            if(!speechRecognitionSupported) {
+                return;
+            }
+            talkToMe = true;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            recognition.continuous = true;                                                        
+            recognition.start();
+            console.log('Starting recognition');
+            registerForSpeechEvents();                
+        }        
+        
+        function registerForSpeechEvents() {
+            recognition.onresult = function(event) {
+                recognition.stop();
+                var last = event.results.length - 1;
+                var userText = event.results[last][0].transcript;
+            
+                console.log('Result received: ' + userText + '.');
+                console.log('Confidence: ' + event.results[0][0].confidence);
+                $('.chatInput').val(userText);
+                sendChat();
+            }
+            
+            recognition.onspeechend = function() {
+                console.log('Stopping recognition');
+                //recognition.stop();
+                //startSpeechRecognition();
+            }
+            
+            recognition.onnomatch = function(event) {
+                console.log('@@@@..I didnt understand that.');
+            }
+            
+            recognition.onerror = function(event) {
+                console.log('@@@@..Error occurred in recognition: ' + event.error);
+                if('no-speech' == event.error) {
+                    startSpeechRecognition();    
+                }
+            }       
+        }        
+    </script>    
+    <body style="border:none !important">
+        <div style="padding: 6px 12px 12px 12px;">
+            <button class="talkButton" onClick="startSpeechRecognition();">Talk to me</button>
+        </div>    
+        <div style="padding: 6px 12px 12px 12px;">
+            <div id="chatLog">
+            </div>
+            <input class="chatInput" type="text" placeholder="Write your message..." />
+            <button class="chatButton" onClick="sendChat();">Send</button>
+        </div>
+    </body>
+
+</apex:page>

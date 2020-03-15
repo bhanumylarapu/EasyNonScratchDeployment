@@ -1,0 +1,50 @@
+<apex:page showHeader="false">
+<!-- This script takes the endpoint URL parameter passed from the deployment
+page and makes it the action for the form -->
+<script type='text/javascript'>
+(function() {
+function handlePageLoad() {
+var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+document.getElementById('prechatForm').setAttribute('action',
+decodeURIComponent(endpointMatcher.exec(document.location.search)[1].replace("
+javascript:", "")));
+} if (window.addEventListener) {
+window.addEventListener('load', handlePageLoad, false);
+} else { window.attachEvent('onload', handlePageLoad, false);
+}})();
+</script>
+<h1>Live Agent Pre-Chat Form</h1>
+<!-- Form that gathers information from the chat visitor and sets the values
+to Live Agent Custom Details used later in the example -->
+<form method='post' id='prechatForm'>
+First name: <input type='text' name='liveagent.prechat:FirstName'
+id='firstName' /><br />
+Last name: <input type='text' name='liveagent.prechat:LastName'
+id='lastName' /><br />
+Email: <input type='text' name='liveagent.prechat:Email' id='email' /><br
+/>
+<input type="hidden" name= "liveagent.prechat.save:FirstName" value=
+"FirstName__c" />
+<input type="hidden" name= "liveagent.prechat.save:LastName" value=
+"LastName__c" />
+<input type="hidden" name= "liveagent.prechat.save:Email" value=
+"Email__c" />
+<!-- Used to set the visitor's name for the agent in the Console -->
+<input type="hidden" name="liveagent.prechat.name" id="prechat_field_name"
+/>
+<input type='submit' value='Chat Now' id='prechat_submit'
+onclick="setName()"/>
+<!-- Set the visitor's name for the agent in the Console to first and last
+name provided by the customer -->
+<script type="text/javascript">
+function setName() {
+document.getElementById("prechat_field_name").value =
+document.getElementById("firstName").value + " " +
+document.getElementById("lastName").value;
+}
+</script>
+<style type="text/css">
+p {font-weight: bolder }
+</style>
+</form>
+</apex:page>

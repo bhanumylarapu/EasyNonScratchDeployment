@@ -1,0 +1,153 @@
+<apex:page showHeader="false">
+  <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge" />
+      <title>SLDS LatestAccounts Visualforce Page in Salesforce Mobile</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <!-- Import the Design System style sheet -->
+      <apex:slds />
+      <style type="text/css">
+        .search-btn{
+        background:rgb(105, 190, 40) !important;
+        border:rgb(105, 190, 40)!important;
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        text-align: center;
+        vertical-align: middle;
+        color:white !important;
+        border-radius: .25rem;
+        line-height: 1.999rem !important;
+        text-decoration: none;
+
+        -webkit-appearance: none;
+        white-space: normal;
+        user-select: none;
+        }
+
+        .search-input{
+        border-top-right-radius: 0rem !important;
+        border-bottom-right-radius: 0rem !important;
+        }
+
+        .brand-logo{
+        background-image: url('/chat/file-asset/deloitte?v=1');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        z-index: 99;
+        cursor: pointer;
+        position: relative;
+        max-width: 100%;
+        max-height: 52px;
+        display: block;
+        outline: 0;
+        width: 80%;
+        height: 45px;
+        }
+        
+        .embeddedServiceHelpButton .helpButton .uiButton { 
+            background-color: #222222; 
+            font-family: "Salesforce Sans", sans-serif; 
+        }
+        
+        .embeddedServiceHelpButton .helpButton .uiButton:focus { 
+            outline: 1px solid #222222; 
+        }
+        @font-face {
+            font-family: 'Salesforce Sans';
+            src: url('https://www.sfdcstatic.com/system/shared/common/assets/fonts/SalesforceSans/SalesforceSans-Regular.woff') format('woff'),
+            url('https://www.sfdcstatic.com/system/shared/common/assets/fonts/SalesforceSans/SalesforceSans-Regular.ttf') format('truetype');
+        }
+        .message {
+            background-color: #fff !important;
+        }
+      </style>
+      
+      
+
+    <script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
+    <script type='text/javascript'>
+        var initESW = function(gslbBaseURL) {
+            embedded_svc.settings.displayHelpButton = true; //Or false
+            embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+            embedded_svc.settings.widgetWidth = '28%';
+            embedded_svc.settings.widgetHeight = '80%';
+            
+            embedded_svc.settings.defaultMinimizedText = 'Let&#8217;s Chat'; //(Defaults to Chat with an Expert)
+            //embedded_svc.settings.disabledMinimizedText = 'Agent Offline'; //(Defaults to Agent Offline)
+            
+            //embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+            //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+            
+            // Settings for Live Agent
+            //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+            // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+            // Returns a valid button ID.
+            //};
+            //embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+            //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+            //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+            
+            embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+            embedded_svc.settings.entryFeature = 'LiveAgent';
+            
+            embedded_svc.init('https://deloitte-einstein-service.my.salesforce.com', 'https://einsteinbot-service.secure.force.com', gslbBaseURL, '00D46000000YVcM', 'snapIn_DF18_Demo', { baseLiveAgentContentURL: 'https://c.la3-c1-dfw.salesforceliveagent.com/content', deploymentId: '57246000000g6PR', buttonId: '57346000000g6y3', baseLiveAgentURL: 'https://d.la3-c1-dfw.salesforceliveagent.com/chat', eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I46000000KyoGEAS_165ecd59c34', isOfflineSupportEnabled: true}); 
+        };
+        if (!window.embedded_svc) { 
+            var s = document.createElement('script');
+                s.setAttribute('src', 'https://deloitte-einstein-service.my.salesforce.com/embeddedservice/5.0/esw.min.js'); 
+                s.onload = function() { initESW(null); }; 
+            document.body.appendChild(s); 
+        } else { initESW('https://service.force.com'); }
+    </script>
+      
+      
+    </head>     
+    <body>
+      <div class="slds-scope">
+        <div class="slds-grid slds-wrap">
+          <div class="slds-col slds-p-around_large slds-size_12-of-12" style="background:black">
+            <div class="slds-grid">
+              <div class="slds-col slds-size_3-of-12" style="text-align: right;padding-top: 0.3rem;padding-right: 1rem;">
+                <img src="{!$Resource.dLogo}" width="120" height="120"  />
+              </div>
+              <!-- <div class="slds-col slds-size_5-of-12">
+                <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                    <input id="text-input-id-1" class="slds-input search-input" type="text" value="" />
+                  </div>
+                </div>
+              </div>
+              <div class="slds-col slds-size_1-of-12">
+                <button class="slds-button search-btn">Search</button>
+              </div>
+              <div class="slds-col slds-size_3-of-12" >
+                <div class="slds-media">
+                <div class="slds-media__figure">
+                  <span>
+                    <img class=" profileIcon" alt="" src="{!$Resource.userIcon}" title="Rahul Kumar" style="border-radius:50px" height="30" width="30"/>
+                  </span>
+                </div>
+                <div class="slds-media__body" style="padding-top:0.3rem">
+                  <p style="color:white">Rahul Kumar</p>
+                </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="slds-col slds-size_12-of-12" style="background:black;border-top:1px solid white">
+           <span>2</span>
+          </div>
+
+          <div class="slds-col slds-size_12-of-12 slds-p-around_small slds-text-align_center" >
+            <div class="slds-text-heading_large">EINSTEIN BOT DEMO</div>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+</apex:page>
